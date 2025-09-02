@@ -96,3 +96,9 @@ export interface AffiliateGame {
     };
     rawGame?: Game;
 }
+export interface Affiliate {
+    id: number;
+    name: string;
+    level: string;
+    parent?: string;
+}

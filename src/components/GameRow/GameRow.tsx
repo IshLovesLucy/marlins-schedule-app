@@ -10,20 +10,31 @@ interface GameRowProps {
 
 export default function GameRow({ teamId, game, gameState }: GameRowProps) {
     const { teamName, isLoading: teamInfoLoading } = useTeamInfo(teamId);
-
-    // Get opponent team info for parent org
     const opponentTeamId = game ? (
         game.teams.home.team.id === teamId
             ? game.teams.away.team.id
             : game.teams.home.team.id
     ) : null;
-
     const {
         teamName: opponentName,
         parentOrgName: opponentParentOrg,
-        abbreviation: opponentAbbrev,
+        parentOrgAbbreviation: opponentParentAbbrev,
         isLoading: opponentInfoLoading
-    } = useTeamInfo(opponentTeamId || 0);
+    } = useTeamInfo(opponentTeamId || 0, { skip: !opponentTeamId });
+
+    const isHome = game?.teams.home.team.id === teamId;
+    const myTeam = isHome ? game.teams.home : game?.teams.away;
+    const opponentTeam = isHome ? game.teams.away : game?.teams.home;
+
+    const formatOpponent = () => {
+        let display = opponentName || opponentTeam?.team.name;
+
+        if (opponentParentOrg && opponentParentAbbrev) {
+            display += ` (${opponentParentAbbrev})`;
+        }
+
+        return display;
+    };
 
     if (teamInfoLoading) {
         return <Box><Typography>Loading...</Typography></Box>;
@@ -38,22 +49,9 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
         );
     }
 
-    if (!game || opponentInfoLoading) return <Typography>Loading game info...</Typography>;
-
-    const isHome = game.teams.home.team.id === teamId;
-    const myTeam = isHome ? game.teams.home : game.teams.away;
-    const opponentTeam = isHome ? game.teams.away : game.teams.home;
-
-    const formatOpponent = () => {
-        let display = opponentName;
-
-        if (opponentParentOrg && opponentParentOrg !== opponentName) {
-
-            display += ` (${opponentAbbrev})`;
-        }
-
-        return display;
-    };
+    if (!game || opponentInfoLoading) {
+        return <Typography>Loading game info...</Typography>;
+    }
 
     const renderGameContent = () => {
         switch (gameState) {
@@ -78,10 +76,10 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                 return (
                     <Box>
                         <Typography variant="h6">
-                            {teamName} {myTeam.score || 0}
+                            {teamName} {myTeam?.score || 0}
                         </Typography>
                         <Typography>
-                            {isHome ? 'vs.' : '@'} {formatOpponent()} {opponentTeam.score || 0}
+                            {isHome ? 'vs.' : '@'} {formatOpponent()} {opponentTeam?.score || 0}
                         </Typography>
                         <Chip label="LIVE" size="small" />
                     </Box>
@@ -91,10 +89,10 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                 return (
                     <Box>
                         <Typography variant="h6">
-                            {teamName} {myTeam.score || 0}
+                            {teamName} {myTeam?.score || 0}
                         </Typography>
                         <Typography>
-                            {isHome ? 'vs.' : '@'} {formatOpponent()} {opponentTeam.score || 0}
+                            {isHome ? 'vs.' : '@'} {formatOpponent()} {opponentTeam?.score || 0}
                         </Typography>
                         <Chip label="FINAL" size="small" />
                     </Box>

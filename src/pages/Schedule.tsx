@@ -21,10 +21,7 @@ export default function SchedulePage() {
         return date.toISOString().split('T')[0];
     };
 
-    const today = new Date();
-    const isToday = selectedDate.toDateString() === today.toDateString();
-    const apiDate = isToday ? undefined : formatDateForAPI(selectedDate);
-
+    const apiDate = formatDateForAPI(selectedDate);
     const { data, error, isLoading } = useGetScheduleByDateQuery(apiDate);
 
     const handleDateChange = (newDate: Date) => {

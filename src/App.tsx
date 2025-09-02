@@ -5,7 +5,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<SchedulePage />} />
-      <Route path="/date/:date" element={<SchedulePage />} />
     </Routes>
   );
 }

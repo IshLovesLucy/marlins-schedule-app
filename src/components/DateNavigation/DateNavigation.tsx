@@ -1,4 +1,5 @@
-import { Box, Button, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Box, IconButton, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { CalendarToday } from '@mui/icons-material';
 
@@ -8,15 +9,7 @@ interface DateNavigationProps {
 }
 
 export default function DateNavigation({ selectedDate, onDateChange }: DateNavigationProps) {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const isToday = selectedDate.toDateString() === today.toDateString();
-    const isYesterday = selectedDate.toDateString() === yesterday.toDateString();
-    const isTomorrow = selectedDate.toDateString() === tomorrow.toDateString();
+    const [open, setOpen] = useState(false);
 
     const formatDisplayDate = (date: Date): string => {
         return date.toLocaleDateString('en-US', {
@@ -28,46 +21,47 @@ export default function DateNavigation({ selectedDate, onDateChange }: DateNavig
 
     return (
         <Box>
-            <Typography variant="h3">
+            <Typography variant="h5" component="h1" className='text-align'>
                 Schedule and Results
             </Typography>
 
-            <Box>
-                <Typography variant="h6">
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                mb: 1
+            }} className='text-align'>
+
+                <Typography variant="h6" color="text.secondary">
                     {formatDisplayDate(selectedDate)}
                 </Typography>
-                <CalendarToday />
-            </Box>
 
-            <Box>
-                <Button
+                <IconButton
+                    onClick={() => setOpen(true)}
+                    color="primary"
                     size="small"
-                    variant={isYesterday ? 'contained' : 'outlined'}
-                    onClick={() => onDateChange(yesterday)}
                 >
-                    Yesterday
-                </Button>
-
-                <Button
-                    size="small"
-                    variant={isToday ? 'contained' : 'outlined'}
-                    onClick={() => onDateChange(today)}
-                >
-                    Today
-                </Button>
-
-                <Button
-                    size="small"
-                    variant={isTomorrow ? 'contained' : 'outlined'}
-                    onClick={() => onDateChange(tomorrow)}
-                >
-                    Tomorrow
-                </Button>
+                    <CalendarToday />
+                </IconButton>
 
                 <DatePicker
-                    label="Select Date"
+                    open={open}
+                    onClose={() => setOpen(false)}
                     value={selectedDate}
-                    onChange={(newDate) => newDate && onDateChange(newDate)}
+                    onChange={(newValue) => {
+                        if (newValue) {
+                            onDateChange(newValue);
+                        }
+                        setOpen(false);
+                    }}
+                    slotProps={{
+                        textField: {
+                            sx: { display: 'none' }
+                        },
+                        toolbar: {
+                            hidden: true // This might hide the toolbar
+                        }
+                    }}
                 />
             </Box>
         </Box>

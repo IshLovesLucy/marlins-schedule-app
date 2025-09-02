@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { TeamResponse, MLBScheduleResponse } from '../../types/mlb';
+import type { TeamResponse, MLBScheduleResponse, GameFeedResponse } from '../../types/mlb';
 import { API_CONFIG, TEAM_IDS, SPORT_IDS } from '../../constants/';
 
 export const mlbApi = createApi({
@@ -24,7 +24,18 @@ export const mlbApi = createApi({
             query: (teamId) => `teams/${teamId}`,
             keepUnusedDataFor: API_CONFIG.CACHE_TEAM_INFO_TIME,
         }),
+        getGameFeed: builder.query<GameFeedResponse, number>({
+            query: (gamePk) => ({
+                url: `https://statsapi.mlb.com/api/v1.1/game/${gamePk}/feed/live`,
+                method: 'GET'
+            }),
+            keepUnusedDataFor: 60, // 1 minute cache for live data
+        }),
     }),
 });
 
-export const { useGetScheduleByDateQuery, useGetTeamByIdQuery } = mlbApi;
+export const {
+    useGetScheduleByDateQuery,
+    useGetTeamByIdQuery,
+    useGetGameFeedQuery,
+} = mlbApi;

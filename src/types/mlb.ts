@@ -23,6 +23,87 @@ export interface TeamResponse {
     }];
 }
 
+export interface GameFeedResponse {
+    gameData: {
+        venue: {
+            name: string;
+            location: {
+                city?: string;
+                stateAbbrev?: string;
+                country?: string;
+            };
+        };
+        probablePitchers?: {
+            away?: {
+                lastName: string;
+            };
+            home?: {
+                lastName: string;
+            };
+        };
+    };
+    liveData: {
+        linescore?: {
+            currentInningOrdinal?: string;
+            inningState?: string;
+            outs?: number;
+        };
+        decisions?: {
+            winner?: {
+                lastName: string;
+            };
+            loser?: {
+                lastName: string;
+            };
+            save?: {
+                lastName: string;
+            };
+        };
+    };
+}
+
+export interface GameDetails {
+    gamePk: number;
+    venue: {
+        name: string;
+        city?: string;
+        state?: string;
+        country?: string;
+    };
+    probablePitchers?: {
+        away?: {
+            fullName: string;
+            lastName: string;
+        };
+        home?: {
+            fullName: string;
+            lastName: string;
+        };
+    };
+    liveData?: {
+        inning?: number;
+        inningOrdinal?: string;
+        inningState?: string;
+        outs?: number;
+        balls?: number;
+        strikes?: number;
+    };
+    decisions?: {
+        winner?: {
+            fullName: string;
+            lastName: string;
+        };
+        loser?: {
+            fullName: string;
+            lastName: string;
+        };
+        save?: {
+            fullName: string;
+            lastName: string;
+        };
+    };
+}
+
 export interface ScheduleDate {
     date: string;
     totalItems: number;

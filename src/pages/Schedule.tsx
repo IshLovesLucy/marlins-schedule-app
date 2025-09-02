@@ -17,12 +17,10 @@ interface ProcessedGame {
 export default function SchedulePage() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    // Format date for API (YYYY-MM-DD)
     const formatDateForAPI = (date: Date): string => {
         return date.toISOString().split('T')[0];
     };
 
-    // Don't pass date parameter if it's today (API default)
     const today = new Date();
     const isToday = selectedDate.toDateString() === today.toDateString();
     const apiDate = isToday ? undefined : formatDateForAPI(selectedDate);
@@ -33,53 +31,49 @@ export default function SchedulePage() {
         setSelectedDate(newDate);
     };
 
-    // Process API data into component format
     const processScheduleData = (): ProcessedGame[] => {
         const games = data?.dates?.[0]?.games || [];
         const affiliateTeamIds = Object.values(TEAM_ABBREV_IDS_MAP);
+        const result: ProcessedGame[] = [];
 
-        return affiliateTeamIds.map(teamId => {
-            // Find if this affiliate has a game
-            const game = games.find(g =>
+        affiliateTeamIds.forEach(teamId => {
+            const teamGames = games.filter(g =>
                 g.teams.home.team.id === teamId ||
                 g.teams.away.team.id === teamId
             );
 
-            if (game) {
-                const isHome = game.teams.home.team.id === teamId;
-                const myTeam = isHome ? game.teams.home : game.teams.away;
-
-                // Get game state
-                let gameState: 'preview' | 'live' | 'final' = 'preview';
-                switch (game.status.abstractGameState) {
-                    case 'Preview':
-                        gameState = 'preview';
-                        break;
-                    case 'Live':
-                        gameState = 'live';
-                        break;
-                    case 'Final':
-                        gameState = 'final';
-                        break;
-                }
-
-                return {
-                    teamId,
-                    teamName: myTeam.team.name,
-                    level: myTeam.team.sport?.name || 'Unknown',
-                    gameState,
-                    game
-                };
-            } else {
-                // No game for this affiliate
-                return {
+            if (teamGames.length === 0) {
+                result.push({
                     teamId,
                     teamName: `Team ${teamId}`,
                     level: 'Unknown',
-                    gameState: 'noGame' as const
-                };
+                    gameState: 'noGame',
+                    game: undefined
+                });
+            } else {
+                teamGames.forEach(game => {
+                    const isHome = game.teams.home.team.id === teamId;
+                    const myTeam = isHome ? game.teams.home : game.teams.away;
+
+                    let gameState: 'preview' | 'live' | 'final' = 'preview';
+                    switch (game.status.abstractGameState) {
+                        case 'Preview': gameState = 'preview'; break;
+                        case 'Live': gameState = 'live'; break;
+                        case 'Final': gameState = 'final'; break;
+                    }
+
+                    result.push({
+                        teamId,
+                        teamName: myTeam.team.name,
+                        level: 'Unknown',
+                        gameState,
+                        game
+                    });
+                });
             }
         });
+
+        return result;
     };
 
     if (error) {
@@ -112,9 +106,9 @@ export default function SchedulePage() {
                 </Box>
             ) : (
                 <Paper>
-                    {scheduleData.map((gameData) => (
+                    {scheduleData.map((gameData, index) => (
                         <GameRow
-                            key={gameData.teamId}
+                            key={`${gameData.teamId}-${gameData.game?.gamePk || 'noGame'}-${index}`}
                             teamId={gameData.teamId}
                             game={gameData.game}
                             gameState={gameData.gameState}

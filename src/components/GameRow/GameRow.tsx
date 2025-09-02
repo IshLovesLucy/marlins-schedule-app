@@ -1,5 +1,4 @@
 import { Box, Typography, Chip } from '@mui/material';
-import { SportsBaseball, EventBusy } from '@mui/icons-material';
 import { useTeamInfo } from '../../hooks/useTeamInfo';
 import type { Game } from '../../types/mlb';
 
@@ -10,7 +9,7 @@ interface GameRowProps {
 }
 
 export default function GameRow({ teamId, game, gameState }: GameRowProps) {
-    const { teamName, level, isLoading: teamInfoLoading } = useTeamInfo(teamId);
+    const { teamName, isLoading: teamInfoLoading } = useTeamInfo(teamId);
 
     // Get opponent team info for parent org
     const opponentTeamId = game ? (

@@ -7,6 +7,22 @@ export interface MLBScheduleResponse {
     dates: ScheduleDate[];
 }
 
+export interface TeamResponse {
+    teams: [{
+        id: number;
+        name: string;
+        clubName: string;
+        locationName: string;
+        abbreviation: string;
+        sport: {
+            id: number;
+            name: string;
+        };
+        parentOrgName?: string;
+        parentOrgId?: number;
+    }];
+}
+
 export interface ScheduleDate {
     date: string;
     totalItems: number;

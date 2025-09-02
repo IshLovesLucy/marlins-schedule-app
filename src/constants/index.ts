@@ -24,7 +24,8 @@ export const SPORT_IDS_MAP = {
 
 export const API_CONFIG = {
     BASE_URL: 'https://statsapi.mlb.com/api/v1/',
-    CACHE_TIME: 300, // 5 minutes in seconds
+    CACHE_SCHEDULE_INFO_TIME: 300, // 5 minutes in seconds
+    CACHE_TEAM_INFO_TIME: 3600, // Cache team info for 1 hour
 } as const;
 
 export const TEAM_IDS = Object.values(TEAM_ABBREV_IDS_MAP);

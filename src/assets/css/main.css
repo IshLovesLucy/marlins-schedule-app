@@ -3,7 +3,6 @@
 ===================================== */
 :root {
     --max-app-width: 900px;
-    --small-device-width: 767px;
 
     /* Marlins Brand Colors */
     --marlins-primary: #00a3e0;
@@ -31,8 +30,8 @@
     --text-disabled: var(--marlins-gray-light);
 
     /* Status Colors */
-    --status-success: #2e7d32;
-    --status-error: #d32f2f;
+    --status-success: var(--marlins-primary);
+    --status-error: var(--marlins-secondary);
     --status-info: #1976d2;
 }
 
@@ -76,7 +75,7 @@ body {
 }
 
 /* =====================================
-   Game Row (2x3 Grid System)
+   Game Row
 ===================================== */
 .game-row {
     display: grid;
@@ -92,10 +91,10 @@ body {
     transition: background-color 0.2s ease;
     gap: 8px 16px;
     min-height: 60px;
-}
 
-.game-row:hover {
-    background-color: var(--bg-hover);
+    &:hover {
+        background-color: var(--bg-hover);
+    }
 }
 
 /* --- States --- */
@@ -109,6 +108,20 @@ body {
 }
 
 /* --- Elements --- */
+.game-row__bottom-left,
+.game-row__bottom-center,
+.game-row__venue,
+.game-row__pitcher-info,
+.game-row__pitcher-decisions {
+    font-size: small;
+    color: var(--text-muted);
+}
+
+.game-row__time-status,
+.game-row__venue {
+    text-align: right;
+}
+
 .game-row__team-name {
     grid-area: team-name;
     font-weight: 600;
@@ -123,7 +136,6 @@ body {
 
 .game-row__time-status {
     grid-area: time-status;
-    text-align: right;
     margin: 0;
 }
 
@@ -138,7 +150,6 @@ body {
 
 .game-row__venue {
     grid-area: venue;
-    color: var(--text-muted);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -147,7 +158,7 @@ body {
 
 .game-row__no-game {
     grid-area: no-game;
-    text-align: center;
+    text-align: left;
     color: var(--text-disabled);
     font-style: italic;
     text-transform: uppercase;
@@ -192,43 +203,30 @@ body {
 
 .game-row__pitcher-info {
     color: var(--text-muted);
-    font-weight: 500;
 }
 
 .game-row__at-bat {
     color: var(--status-error);
-    font-weight: 600;
-    text-transform: uppercase;
 }
 
 .game-row__live-info {
     color: var(--status-error);
-    font-weight: 600;
 }
 
 .game-row__game-time {
     color: var(--status-info);
-    font-weight: 600;
 }
 
 .game-row__pitcher-decisions {
     color: var(--text-muted);
-    font-weight: 500;
 }
 
 /* --- Status Chips --- */
 .game-row__status-chip {
     min-width: 60px !important;
     height: 24px !important;
-    font-weight: 700 !important;
     text-transform: uppercase !important;
     border-radius: 12px !important;
-}
-
-.game-row__status-chip--live {
-    background-color: var(--status-error) !important;
-    color: var(--text-secondary) !important;
-    animation: pulse 2s infinite;
 }
 
 .game-row__status-chip--final {

@@ -193,10 +193,10 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                             <span className="game-row__pitcher-info">SP: {marlinsPitcher}</span>
                         )}
                         {gameState === 'live' && isMarlinsAtBat && currentBatter && (
-                            <span className="game-row__at-bat">AT BAT: {currentBatter}</span>
+                            <span className="game-row__at-bat">At Bat: {currentBatter}</span>
                         )}
                         {gameState === 'live' && !isMarlinsAtBat && currentPitcher && (
-                            <span className="game-row__pitcher-info">PITCHING: {currentPitcher}</span>
+                            <span className="game-row__pitcher-info">Pitching: {currentPitcher}</span>
                         )}
                         {gameState === 'final' && marlinsDecisions && (
                             <span className="game-row__pitcher-decisions">{marlinsDecisions}</span>

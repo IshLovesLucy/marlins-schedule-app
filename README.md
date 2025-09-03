@@ -27,13 +27,13 @@
 
 ### Tech Stack Choices
 - **Vite + React + TypeScript**: Fast development with type safety
-- **Material-UI**: Professional components with accessible design
+- **Material-UI**: Professional components with accessible design out of box
 - **RTK Query**: Data fetching with automatic caching and real-time updates
 - **MLB Stats API**: Official MLB data source for schedules and live game data
 
 ### Architecture Decisions
 - **Component structure**: Separated pages from reusable components
-- **2x3 Grid Layout**: Custom grid system for optimal information display
+- **CSS Grid Layout**: Custom grid system for optimal information display
 - **API integration**: RTK Query handles schedule and live game data with TypeScript interfaces
 - **State management**: Redux store for API state, local React state for UI interactions
 
@@ -49,7 +49,7 @@
 1. Set up project foundation with Vite, TypeScript, and Material-UI
 2. Integrated MLB Stats API with RTK Query and proper caching
 3. Built comprehensive team mapping for all Marlins affiliates
-4. Implemented 2x3 grid layout system for optimal data presentation
+4. Implemented 2x3 grid layout system for data presentation per wireframe
 5. Added real-time live game data with current batter/pitcher tracking
 6. Enhanced with date navigation, refresh functionality, and error handling
 
@@ -68,8 +68,23 @@
 - DSL Marlins (Dominican Summer League)
 - Plus additional affiliate teams and training sites
 
-### Future Enhancements
-- Advanced game statistics and player information
+### Long-Term Thinking: Possible Future Wins, Gains, 3 Steps Ahead Mindset
+**Performance & Scale**
+- Strategic caching policies based on timezone and traffic patterns
+- CDN integration for faster global access
+- Performance monitoring and optimization
+
+**Enhanced User Experience**  
+- Team logo integration with AWS S3 storage
+- Mobile-first progressive web app
 - Push notifications for game updates
-- Historical schedule data and team performance metrics
-- Mobile app version with offline capability
+
+**Data & Analytics**
+- Historical schedule data and performance metrics
+- User engagement tracking and personalization
+- Advanced game statistics integration
+
+**Technical Infrastructure**
+- Improved CSS architecture with design system
+- Comprehensive test coverage and CI/CD pipeline
+- Multi-language support for international fans

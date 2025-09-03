@@ -139,8 +139,8 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 >
-                                    <Typography sx={{ fontSize: 12, color: 'var(--text-primary)' }}>
-                                        League: {level}
+                                    <Typography sx={{ fontSize: 12, color: 'var(--text-primary)', padding: '2px' }}>
+                                        Level: {level}
                                     </Typography>
                                 </Popover>
                             </>

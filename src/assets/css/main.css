@@ -1,6 +1,9 @@
+/* =====================================
+   Design Tokens
+===================================== */
 :root {
     --max-app-width: 900px;
-    --small-device-width: 76px;
+    --small-device-width: 767px;
 
     /* Marlins Brand Colors */
     --marlins-primary: #00a3e0;
@@ -33,16 +36,22 @@
     --status-info: #1976d2;
 }
 
+/* =====================================
+   Global
+===================================== */
 body {
     font-family: "proxima-nova", "open Sans", "Helvetica", "Arial", sans-serif;
     margin: 0;
     background-color: var(--bg-secondary);
-
-    &:has(div[role=presentation]) {
-        padding-right: 0 !important;
-    }
 }
 
+body:has(div[role=presentation]) {
+    padding-right: 0 !important;
+}
+
+/* =====================================
+   Header
+===================================== */
 .header__content {
     width: 100vw;
     position: relative;
@@ -54,20 +63,21 @@ body {
     background-color: var(--bg-primary);
     border-bottom: 1px solid var(--border-secondary);
     margin-bottom: 20px;
-
-    .header__content--full-width {
-        max-width: var(--max-app-width);
-        margin: 0 auto;
-    }
-
-    h1 {
-        text-transform: uppercase;
-        color: var(--text-secondary);
-    }
 }
 
+.header__content--full-width {
+    max-width: var(--max-app-width);
+    margin: 0 auto;
+}
 
-/* Complete 2x3 Grid System for GameRow */
+.header__title {
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+/* =====================================
+   Game Row (2x3 Grid System)
+===================================== */
 .game-row {
     display: grid;
     grid-template-columns: 2.5fr 2fr 2fr;
@@ -88,20 +98,21 @@ body {
     background-color: var(--bg-hover);
 }
 
-/* Top Row Cells */
-.game-row__team-name {
-    grid-area: team-name;
-    color: var(--text-primary);
-    font-weight: 600;
-    margin: 0;
+/* --- States --- */
+.game-row--no-game {
+    grid-template-areas:
+        "team-name  no-game  .";
 }
 
-.game-row__level-icon {
-    cursor: pointer;
-    border-bottom: 1px dotted var(--text-secondary);
-    user-select: none;
-    position: relative;
-    padding-right: 2px;
+.game-row--loading {
+    color: var(--text-muted);
+}
+
+/* --- Elements --- */
+.game-row__team-name {
+    grid-area: team-name;
+    font-weight: 600;
+    margin: 0;
 }
 
 .game-row__opponent {
@@ -116,7 +127,6 @@ body {
     margin: 0;
 }
 
-/* Bottom Row Cells */
 .game-row__bottom-left {
     grid-area: bottom-left;
     margin: 0;
@@ -135,7 +145,39 @@ body {
     margin: 0;
 }
 
-/* Content Styling */
+.game-row__no-game {
+    grid-area: no-game;
+    text-align: center;
+    color: var(--text-disabled);
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+.game-row__loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.game-row__level-icon {
+    cursor: pointer;
+    border-bottom: 1px dotted var(--text-secondary);
+    user-select: none;
+    position: relative;
+    margin-right: 2px;
+    overflow: hidden;
+    display: inline-flex;
+    border-radius: 4px;
+
+    @media (max-width: 767px) {
+        display: flex;
+        border-radius: 4px;
+        flex-wrap: nowrap;
+        flex-direction: column-reverse;
+    }
+}
+
+/* --- Modifiers --- */
 .game-row__score {
     font-weight: 700;
 }
@@ -174,7 +216,7 @@ body {
     font-weight: 500;
 }
 
-/* Status Chips */
+/* --- Status Chips --- */
 .game-row__status-chip {
     min-width: 60px !important;
     height: 24px !important;
@@ -197,52 +239,4 @@ body {
 .game-row__status-chip--preview {
     background-color: var(--status-info) !important;
     color: var(--text-secondary) !important;
-}
-
-/* No Game State */
-.game-row--no-game {
-    grid-template-areas:
-        "team-name    .        ."
-        ".            no-game  .";
-}
-
-.game-row__no-game {
-    grid-area: no-game;
-    text-align: center;
-    color: var(--text-disabled);
-    font-style: italic;
-    text-transform: uppercase;
-}
-
-/* Loading State */
-.game-row__loading {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--text-muted);
-}
-
-/* Mobile Responsive */
-@media (max-width: var(--small-device-width)) {
-    .game-row {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto auto auto;
-        grid-template-areas:
-            "team-name"
-            "opponent"
-            "time-status"
-            "bottom-left"
-            "bottom-center"
-            "venue";
-        gap: 4px;
-    }
-
-    .game-row__time-status,
-    .game-row__bottom-center {
-        justify-content: flex-start;
-    }
-
-    .game-row__venue {
-        text-align: left;
-    }
 }

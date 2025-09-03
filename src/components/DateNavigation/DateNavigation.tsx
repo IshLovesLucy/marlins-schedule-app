@@ -43,7 +43,7 @@ export default function DateNavigation({ selectedDate, onDateChange }: DateNavig
     return (
         <Box className='header__content'>
             <div className='header__content--full-width'>
-                <Typography variant="h5" component="h1" className="text-align">
+                <Typography variant="h5" component="h1" className="header__title">
                     Schedule and Results
                 </Typography>
                 <Box sx={{

@@ -12,6 +12,8 @@ interface UseGameDetailsReturn {
     bothPitchersInfo: string | null;
     liveGameInfo: string | null;
     gameDecisions: string | null;
+    currentBatter: string | null;
+    currentPitcher: string | null;
 }
 interface GameFeedData {
     gameData?: {
@@ -39,11 +41,17 @@ interface GameFeedData {
             loser?: { fullName?: string };
             save?: { fullName?: string };
         };
+        plays?: {
+            currentPlay?: {
+                matchup?: {
+                    batter?: { fullName?: string };
+                    pitcher?: { fullName?: string };
+                };
+            };
+        };
     };
 }
 
-
-// --- helpers ---
 const getLastName = (fullName?: string) => fullName?.split(' ').pop() || null;
 
 const formatVenue = (gameFeedData: GameFeedData, fallbackVenue?: { name?: string }) => {
@@ -104,6 +112,18 @@ const formatDecisions = (gameFeedData: GameFeedData, status: string) => {
     return parts.length ? parts.join(', ') : null;
 };
 
+const formatCurrentBatter = (gameFeedData: GameFeedData, status: string) => {
+    if (status !== 'I') return null;
+    const batter = gameFeedData?.liveData?.plays?.currentPlay?.matchup?.batter?.fullName;
+    return getLastName(batter);
+};
+
+const formatCurrentPitcher = (gameFeedData: GameFeedData, status: string) => {
+    if (status !== 'I') return null;
+    const pitcher = gameFeedData?.liveData?.plays?.currentPlay?.matchup?.pitcher?.fullName;
+    return getLastName(pitcher);
+};
+
 export const useGameDetails = ({ game }: UseGameDetailsProps): UseGameDetailsReturn => {
     const shouldFetch = Boolean(game.gamePk);
     const { data: gameFeedData, isLoading, error } = useGetGameFeedQuery(game.gamePk, {
@@ -119,5 +139,7 @@ export const useGameDetails = ({ game }: UseGameDetailsProps): UseGameDetailsRet
         bothPitchersInfo: formatPitchers(gameFeedData as GameFeedData, status),
         liveGameInfo: formatLiveInfo(gameFeedData as GameFeedData, status),
         gameDecisions: formatDecisions(gameFeedData as GameFeedData, status),
+        currentBatter: formatCurrentBatter(gameFeedData as GameFeedData, status),
+        currentPitcher: formatCurrentPitcher(gameFeedData as GameFeedData, status)
     };
 };

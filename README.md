@@ -38,6 +38,7 @@
 - **State management**: Redux store for API state, local React state for UI interactions
 
 ### Key Features Implementation
+- **Marlins.com UI**: Applied Marlins theme, font, colors
 - **Real-time Schedule Data**: Displays all 11 Marlins affiliate teams across all league levels
 - **Live Game Tracking**: Current inning, outs, active batter, and pitching information
 - **Game State Management**: Handles Preview, Live, Final, and No Game states
@@ -73,6 +74,7 @@
 - Strategic caching policies based on timezone and traffic patterns
 - CDN integration for faster global access
 - Performance monitoring and optimization
+- Advanced image formats and sources for RWD
 
 **Enhanced User Experience**  
 - Team logo integration with AWS S3 storage
@@ -88,3 +90,7 @@
 - Improved CSS architecture with design system
 - Comprehensive test coverage and CI/CD pipeline
 - Multi-language support for international fans
+
+### Missed Opportunities
+1. Unit Testing: React/Jest Unit tests for code quality and delivery confidence ⚾ 🛡️🛡️ 💥💥 🚀🚀
+2. On Base Diamond: Display runners on base using SVG and CSS Variables

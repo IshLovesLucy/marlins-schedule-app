@@ -102,17 +102,6 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
     const loading = teamInfoLoading || (!game && gameState !== 'noGame') || opponentInfoLoading;
     const noGame = gameState === 'noGame';
 
-    if (gameState === 'live') {
-        console.log(`Live game ${game?.gamePk}:`, {
-            bothPitchersInfo,
-            liveGameInfo,
-            isMarlinsAtBat,
-            pitchers: splitPitchers(bothPitchersInfo),
-            marlinsPitcher,
-            opponentPitcher
-        });
-    }
-
     return (
         <Box className={`game-row ${noGame ? 'game-row--no-game' : ''}`}>
             {/* Loading */}

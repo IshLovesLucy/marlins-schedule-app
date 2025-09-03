@@ -26,10 +26,10 @@ export const mlbApi = createApi({
         }),
         getGameFeed: builder.query<GameFeedResponse, number>({
             query: (gamePk) => ({
-                url: `https://statsapi.mlb.com/api/v1.1/game/${gamePk}/feed/live`,
+                url: `${API_CONFIG.GAME_FEED_URL}game/${gamePk}/feed/live`,
                 method: 'GET'
             }),
-            keepUnusedDataFor: 60, // 1 minute cache for live data
+            keepUnusedDataFor: API_CONFIG.CACHE_GAME_FEED_TIME,
         }),
     }),
 });

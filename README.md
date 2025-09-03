@@ -1,69 +1,75 @@
-# React + TypeScript + Vite
+# Ish's Miami Marlins Schedule App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Setup Steps
 
-Currently, two official plugins are available:
+1. **Clone the repository**
+   ```bash
+   git clone [your-repo-url]
+   cd miami-marlins-schedule-app
+   ```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+4. **Open your browser**
+   ```
+   http://localhost:5173
+   ```
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Project Architecture
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Tech Stack Choices
+- **Vite + React + TypeScript**: Fast development with type safety
+- **Material-UI**: Professional components with accessible design
+- **RTK Query**: Data fetching with automatic caching and real-time updates
+- **MLB Stats API**: Official MLB data source for schedules and live game data
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Architecture Decisions
+- **Component structure**: Separated pages from reusable components
+- **2x3 Grid Layout**: Custom grid system for optimal information display
+- **API integration**: RTK Query handles schedule and live game data with TypeScript interfaces
+- **State management**: Redux store for API state, local React state for UI interactions
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Key Features Implementation
+- **Real-time Schedule Data**: Displays all 11 Marlins affiliate teams across all league levels
+- **Live Game Tracking**: Current inning, outs, active batter, and pitching information
+- **Game State Management**: Handles Preview, Live, Final, and No Game states
+- **Date Navigation**: Calendar picker with refresh functionality
+- **League Level Display**: Interactive popover showing team league information
+- **Error Handling**: Error boundaries and user-friendly error messages
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Development Process
+1. Set up project foundation with Vite, TypeScript, and Material-UI
+2. Integrated MLB Stats API with RTK Query and proper caching
+3. Built comprehensive team mapping for all Marlins affiliates
+4. Implemented 2x3 grid layout system for optimal data presentation
+5. Added real-time live game data with current batter/pitcher tracking
+6. Enhanced with date navigation, refresh functionality, and error handling
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### MLB API Integration
+- **Schedule Endpoint**: `https://statsapi.mlb.com/api/v1/schedule`
+- **Live Game Feed**: `https://statsapi.mlb.com/api/v1.1/game/{gamePk}/feed/live`
+- **Team Information**: `https://statsapi.mlb.com/api/v1/teams/{teamId}`
+
+### Teams Covered
+- Miami Marlins (MLB)
+- Jacksonville Jumbo Shrimp (AAA)
+- Pensacola Blue Wahoos (AA)
+- Beloit Sky Carp (High-A)
+- Jupiter Hammerheads (Low-A)
+- FCL Marlins (Complex League)
+- DSL Marlins (Dominican Summer League)
+- Plus additional affiliate teams and training sites
+
+### Future Enhancements
+- Advanced game statistics and player information
+- Push notifications for game updates
+- Historical schedule data and team performance metrics
+- Mobile app version with offline capability

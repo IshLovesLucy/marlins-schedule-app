@@ -76,20 +76,6 @@ export default function SchedulePage() {
         return result;
     };
 
-    if (error) {
-        return (
-            <Container maxWidth="md">
-                <DateNavigation
-                    selectedDate={selectedDate}
-                    onDateChange={handleDateChange}
-                />
-                <Alert severity="error">
-                    Failed to load schedule data. Please try again.
-                </Alert>
-            </Container>
-        );
-    }
-
     const scheduleData = processScheduleData();
 
     return (
@@ -99,12 +85,20 @@ export default function SchedulePage() {
                 onDateChange={handleDateChange}
             />
 
-            {isLoading ? (
+            {error && (
+                <Alert severity="error">
+                    Failed to load schedule data. Please try again.
+                </Alert>
+            )}
+
+            {isLoading && (
                 <Box>
                     <CircularProgress />
                     <Typography>Loading schedule...</Typography>
                 </Box>
-            ) : (
+            )}
+
+            {!error && !isLoading && (
                 <Paper>
                     {scheduleData.map((gameData, index) => (
                         <GameRow

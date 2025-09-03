@@ -1,4 +1,5 @@
-import React, { Component, type ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { ReactNode } from 'react';
 import { Alert, Button, Box } from '@mui/material';
 
 interface Props {

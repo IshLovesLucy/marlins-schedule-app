@@ -50,13 +50,13 @@ export interface GameFeedResponse {
         };
         decisions?: {
             winner?: {
-                lastName: string;
+                fullName: string;
             };
             loser?: {
-                lastName: string;
+                fullName: string;
             };
             save?: {
-                lastName: string;
+                fullName: string;
             };
         };
     };

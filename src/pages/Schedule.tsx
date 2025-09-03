@@ -87,7 +87,7 @@ export default function SchedulePage() {
 
             {error && (
                 <Alert severity="error">
-                    Failed to load schedule data. Please try again.
+                    Dooh, Swing and MISS! Please try again.
                 </Alert>
             )}
 

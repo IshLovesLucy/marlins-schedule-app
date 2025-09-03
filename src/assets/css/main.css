@@ -40,13 +40,13 @@
    Global
 ===================================== */
 body {
-    font-family: "proxima-nova", "open Sans", "Helvetica", "Arial", sans-serif;
+    font-family: "proxima-nova", "open Sans", "Helvetica", "Arial", sans-serif !important;
     margin: 0;
     background-color: var(--bg-secondary);
-}
 
-body:has(div[role=presentation]) {
-    padding-right: 0 !important;
+    &:has(div[role=presentation]) {
+        padding-right: 0 !important;
+    }
 }
 
 /* =====================================

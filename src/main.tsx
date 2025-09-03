@@ -4,15 +4,20 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 import App from './App';
 import { store } from './store';
+import './assets/css/main.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <App />
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
         </LocalizationProvider>
       </BrowserRouter>
     </Provider>

@@ -14,21 +14,27 @@ interface ProcessedGame {
     game?: Game;
 }
 
+const formatDateForAPI = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 export default function SchedulePage() {
     const [selectedDate, setSelectedDate] = useState(new Date());
-
-    const formatDateForAPI = (date: Date): string => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+    const [lastUpdated, setLastUpdated] = useState(new Date());
 
     const apiDate = formatDateForAPI(selectedDate);
-    const { data, error, isLoading } = useGetScheduleByDateQuery(apiDate);
+    const { data, error, isLoading, refetch } = useGetScheduleByDateQuery(apiDate);
 
     const handleDateChange = (newDate: Date) => {
         setSelectedDate(newDate);
+    };
+
+    const handleRefresh = () => {
+        refetch();
+        setLastUpdated(new Date());
     };
 
     const processScheduleData = (): ProcessedGame[] => {
@@ -83,6 +89,8 @@ export default function SchedulePage() {
             <DateNavigation
                 selectedDate={selectedDate}
                 onDateChange={handleDateChange}
+                onRefresh={handleRefresh}
+                lastUpdated={lastUpdated}
             />
 
             {error && (

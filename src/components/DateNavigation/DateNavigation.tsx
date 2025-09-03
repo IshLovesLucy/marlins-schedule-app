@@ -1,44 +1,48 @@
 import { useState, useRef } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import RefreshIcon from '@mui/icons-material/Refresh'
 
 interface DateNavigationProps {
     selectedDate: Date;
     onDateChange: (date: Date) => void;
+    onRefresh?: () => void;
+    lastUpdated?: Date;
 }
 
-export default function DateNavigation({ selectedDate, onDateChange }: DateNavigationProps) {
+const formatDisplayDate = (date: Date): string => {
+    return date.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'America/New_York'
+    });
+};
+
+const CalendarToday = () => {
+    return (
+        <svg
+            viewBox="0 0 25 25"
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+        >
+            <rect x="1.69" y="9.07" width="18.62" height="13.71" fill="var(--bg-secondary)" />
+            <path
+                d="M16.9230769 3.9285714c.4679231 0 .8461539-.3831428.8461539-.8571428V1.3571429C17.7692308.884 17.391.5 16.9230769.5c-.4679231 0-.8461538.384-.8461538.8571429v1.7142857c0 .474.3782307.8571428.8461538.8571428zm-11.8461538 0c.467923 0 .8461538-.3831428.8461538-.8571428V1.3571429C5.923077.884 5.5448461.5 5.0769231.5c-.4679231 0-.8461539.384-.8461539.8571429v1.7142857c0 .474.3782308.8571428.8461539.8571428zm15.2307692-.8571428h-.8461538c0 1.4202857-1.1363847 2.5714285-2.5384616 2.5714285-1.4020769 0-2.5384615-1.1511428-2.5384615-2.5714285H7.6153846c0 1.4202857-1.1363846 2.5714285-2.5384615 2.5714285-1.402077 0-2.5384616-1.1511428-2.5384616-2.5714285h-.8461538C.7581538 3.0714286 0 3.8394286 0 4.7857143v18C0 23.732.7581538 24.5 1.6923077 24.5h18.6153846C21.2418462 24.5 22 23.732 22 22.7857143v-18c0-.9462857-.7581538-1.7142857-1.6923077-1.7142857zm0 19.7142857H1.6923077V9.0714286h18.6153846v13.7142857z"
+                fill="none"
+                stroke="var(--marlins-black)"
+                strokeWidth="2"
+                fillRule="nonzero"
+            />
+        </svg>
+    );
+};
+
+export default function DateNavigation({ selectedDate, onDateChange, onRefresh,
+    lastUpdated }: DateNavigationProps) {
     const [open, setOpen] = useState(false);
     const iconButtonRef = useRef(null);
-
-    const formatDisplayDate = (date: Date): string => {
-        return date.toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-            timeZone: 'America/New_York'
-        });
-    };
-
-    const CalendarToday = () => {
-        return (
-            <svg
-                viewBox="0 0 25 25"
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-            >
-                <rect x="1.69" y="9.07" width="18.62" height="13.71" fill="var(--bg-secondary)" />
-                <path
-                    d="M16.9230769 3.9285714c.4679231 0 .8461539-.3831428.8461539-.8571428V1.3571429C17.7692308.884 17.391.5 16.9230769.5c-.4679231 0-.8461538.384-.8461538.8571429v1.7142857c0 .474.3782307.8571428.8461538.8571428zm-11.8461538 0c.467923 0 .8461538-.3831428.8461538-.8571428V1.3571429C5.923077.884 5.5448461.5 5.0769231.5c-.4679231 0-.8461539.384-.8461539.8571429v1.7142857c0 .474.3782308.8571428.8461539.8571428zm15.2307692-.8571428h-.8461538c0 1.4202857-1.1363847 2.5714285-2.5384616 2.5714285-1.4020769 0-2.5384615-1.1511428-2.5384615-2.5714285H7.6153846c0 1.4202857-1.1363846 2.5714285-2.5384615 2.5714285-1.402077 0-2.5384616-1.1511428-2.5384616-2.5714285h-.8461538C.7581538 3.0714286 0 3.8394286 0 4.7857143v18C0 23.732.7581538 24.5 1.6923077 24.5h18.6153846C21.2418462 24.5 22 23.732 22 22.7857143v-18c0-.9462857-.7581538-1.7142857-1.6923077-1.7142857zm0 19.7142857H1.6923077V9.0714286h18.6153846v13.7142857z"
-                    fill="none"
-                    stroke="var(--marlins-black)"
-                    strokeWidth="2"
-                    fillRule="nonzero"
-                />
-            </svg>
-        );
-    };
 
     return (
         <Box className='header__content'>
@@ -64,6 +68,27 @@ export default function DateNavigation({ selectedDate, onDateChange }: DateNavig
                     >
                         <CalendarToday />
                     </IconButton>
+
+                    {onRefresh && (
+                        <IconButton
+                            onClick={onRefresh}
+                            size="small"
+                            title="Refresh schedule"
+                        >
+                            <RefreshIcon style={{ color: 'var(--marlins-white)' }} />
+                        </IconButton>
+                    )}
+
+                    {lastUpdated && (
+                        <Typography variant="caption" sx={{
+                            color: 'var(--text-secondary)',
+                            opacity: 0.8,
+                            fontSize: '0.75rem'
+                        }}>
+                            Last updated: {lastUpdated.toLocaleTimeString()}
+                        </Typography>
+                    )}
+
 
                     <DatePicker
                         open={open}

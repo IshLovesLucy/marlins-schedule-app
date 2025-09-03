@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -9,6 +9,7 @@ interface DateNavigationProps {
 
 export default function DateNavigation({ selectedDate, onDateChange }: DateNavigationProps) {
     const [open, setOpen] = useState(false);
+    const iconButtonRef = useRef(null);
 
     const formatDisplayDate = (date: Date): string => {
         return date.toLocaleDateString('en-US', {
@@ -59,6 +60,7 @@ export default function DateNavigation({ selectedDate, onDateChange }: DateNavig
                     <IconButton
                         onClick={() => setOpen(true)}
                         size="small"
+                        ref={iconButtonRef}
                     >
                         <CalendarToday />
                     </IconButton>
@@ -80,6 +82,13 @@ export default function DateNavigation({ selectedDate, onDateChange }: DateNavig
                             toolbar: {
                                 hidden: true,
                             },
+                            popper: {
+                                anchorEl: iconButtonRef.current,
+                                placement: 'bottom-start',
+                                sx: {
+                                    zIndex: 1300,
+                                }
+                            }
                         }}
                     />
                 </Box>

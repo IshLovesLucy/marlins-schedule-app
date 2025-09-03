@@ -191,10 +191,10 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                             <span className="game-row__pitcher-info">SP: {marlinsPitcher}</span>
                         )}
                         {gameState === 'live' && isMarlinsAtBat && (
-                            <span className="game-row__at-bat">AT BAT</span>
+                            <span className="game-row__at-bat">At Bat: </span>
                         )}
                         {gameState === 'live' && !isMarlinsAtBat && marlinsPitcher && (
-                            <span className="game-row__pitcher-info">P: {marlinsPitcher}</span>
+                            <span className="game-row__pitcher-info">Pitching: {marlinsPitcher}</span>
                         )}
                         {gameState === 'final' && marlinsDecisions && (
                             <span className="game-row__pitcher-decisions">{marlinsDecisions}</span>
@@ -207,7 +207,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                             <span className="game-row__pitcher-info">SP: {opponentPitcher}</span>
                         )}
                         {gameState === 'live' && !isMarlinsAtBat && (
-                            <span className="game-row__at-bat">AT BAT</span>
+                            <span className="game-row__at-bat">AT BAT: </span>
                         )}
                         {gameState === 'live' && isMarlinsAtBat && opponentPitcher && (
                             <span className="game-row__pitcher-info">P: {opponentPitcher}</span>

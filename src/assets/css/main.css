@@ -1,0 +1,241 @@
+:root {
+    --max-app-width: 900px;
+    --small-device-width: 76px;
+
+    /* Marlins Brand Colors */
+    --marlins-primary: #00a3e0;
+    --marlins-secondary: #ef3340;
+    --marlins-white: #fff;
+    --marlins-black: #1a1a1a;
+    --marlins-gray: #666;
+    --marlins-gray-light: #999;
+    --marlins-gray-lighter: #f8f9fa;
+
+    /* Background Colors */
+    --bg-primary: var(--marlins-primary);
+    --bg-secondary: var(--marlins-white);
+    --bg-hover: var(--marlins-gray-lighter);
+
+    /* Border Colors */
+    --border-primary: var(--marlins-black);
+    --border-secondary: #e0e0e0;
+    --border-muted: #ddd;
+
+    /* Text Colors */
+    --text-primary: var(--marlins-black);
+    --text-secondary: var(--marlins-white);
+    --text-muted: var(--marlins-gray);
+    --text-disabled: var(--marlins-gray-light);
+
+    /* Status Colors */
+    --status-success: #2e7d32;
+    --status-error: #d32f2f;
+    --status-info: #1976d2;
+}
+
+body {
+    font-family: "proxima-nova", "open Sans", "Helvetica", "Arial", sans-serif;
+    margin: 0;
+    background-color: var(--bg-secondary);
+
+    &:has(div[role=presentation]) {
+        padding-right: 0 !important;
+    }
+}
+
+.header__content {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding: 16px 24px;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-secondary);
+    margin-bottom: 20px;
+
+    .header__content--full-width {
+        max-width: var(--max-app-width);
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-transform: uppercase;
+        color: var(--text-secondary);
+    }
+}
+
+/* Complete 2x3 Grid System for GameRow */
+.game-row {
+    display: grid;
+    grid-template-columns: 2.5fr 2fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        "team-name    opponent     time-status"
+        "bottom-left  bottom-center venue";
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid var(--border-secondary);
+    background: var(--bg-secondary);
+    transition: background-color 0.2s ease;
+    gap: 8px 16px;
+    min-height: 60px;
+}
+
+.game-row:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Top Row Cells */
+.game-row__team-name {
+    grid-area: team-name;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin: 0;
+}
+
+.game-row__opponent {
+    grid-area: opponent;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.game-row__time-status {
+    grid-area: time-status;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+/* Bottom Row Cells */
+.game-row__bottom-left {
+    grid-area: bottom-left;
+    margin: 0;
+}
+
+.game-row__bottom-center {
+    grid-area: bottom-center;
+}
+
+.game-row__venue {
+    grid-area: venue;
+    color: var(--text-muted);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+}
+
+/* Content Styling */
+.game-row__score {
+    font-weight: 700;
+}
+
+.game-row__score--winning {
+    color: var(--status-success);
+}
+
+.game-row__score--losing {
+    color: var(--status-error);
+}
+
+.game-row__pitcher-info {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.game-row__at-bat {
+    color: var(--status-error);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.game-row__live-info {
+    color: var(--status-error);
+    font-weight: 600;
+}
+
+.game-row__game-time {
+    color: var(--status-info);
+    font-weight: 600;
+}
+
+.game-row__pitcher-decisions {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Status Chips */
+.game-row__status-chip {
+    min-width: 60px !important;
+    height: 24px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    border-radius: 12px !important;
+}
+
+.game-row__status-chip--live {
+    background-color: var(--status-error) !important;
+    color: var(--text-secondary) !important;
+    animation: pulse 2s infinite;
+}
+
+.game-row__status-chip--final {
+    background-color: var(--status-success) !important;
+    color: var(--text-secondary) !important;
+}
+
+.game-row__status-chip--preview {
+    background-color: var(--status-info) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* No Game State */
+.game-row--no-game {
+    grid-template-areas:
+        "team-name    .        ."
+        ".            no-game  .";
+}
+
+.game-row__no-game {
+    grid-area: no-game;
+    text-align: center;
+    color: var(--text-disabled);
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+/* Loading State */
+.game-row__loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-muted);
+}
+
+/* Mobile Responsive */
+@media (max-width: var(--small-device-width)) {
+    .game-row {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto auto;
+        grid-template-areas:
+            "team-name"
+            "opponent"
+            "time-status"
+            "bottom-left"
+            "bottom-center"
+            "venue";
+        gap: 4px;
+    }
+
+    .game-row__time-status,
+    .game-row__bottom-center {
+        justify-content: flex-start;
+    }
+
+    .game-row__venue {
+        text-align: left;
+    }
+}

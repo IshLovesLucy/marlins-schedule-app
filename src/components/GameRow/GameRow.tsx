@@ -1,9 +1,7 @@
-import React from 'react';
-import { Box, Typography, Chip, CircularProgress } from '@mui/material';
+import { Box, Chip, CircularProgress } from '@mui/material';
 import { useTeamInfo } from '../../hooks/useTeamInfo';
 import { useGameDetails } from '../../hooks/useGameDetails';
 import type { Game } from '../../types/mlb';
-import './GameRow.css'; // Import the wireframe-matching CSS
 
 interface GameRowProps {
     teamId: number;
@@ -55,32 +53,83 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
         });
     };
 
-    const getScoreDisplay = () => {
-        if (gameState === 'noGame' || gameState === 'preview' || !game) return null;
-
+    // Helper functions for 2x3 grid logic
+    const isMarlinsWinning = () => {
+        if (!game) return false;
         const myScore = myTeam?.score ?? 0;
         const opponentScore = opponentTeam?.score ?? 0;
-
-        return `${myScore} - ${opponentScore}`;
+        return myScore > opponentScore;
     };
 
-    const getScoreClass = () => {
-        if (!game) return '';
+    const isMarlinsAtBat = () => {
+        if (!game || gameState !== 'live' || !liveGameInfo) return false;
 
-        const myScore = myTeam?.score ?? 0;
-        const opponentScore = opponentTeam?.score ?? 0;
+        const isTopInning = liveGameInfo.toLowerCase().includes('top');
+        const isBottomInning = liveGameInfo.toLowerCase().includes('bottom');
 
-        if (gameState === 'live' || gameState === 'final') {
-            if (myScore > opponentScore) return 'game-row__score--winning';
-            if (myScore < opponentScore) return 'game-row__score--losing';
-        }
-        return '';
+        // Marlins batting logic: Home + Bottom OR Away + Top
+        if (isHome && isBottomInning) return true;
+        if (!isHome && isTopInning) return true;
+
+        return false;
+    };
+
+    const getMarlinsStartingPitcher = () => {
+        if (!bothPitchersInfo) return null;
+        const pitchers = bothPitchersInfo.split(' vs ');
+        return isHome ? pitchers[1]?.replace('SP: ', '') : pitchers[0]?.replace('SP: ', '');
+    };
+
+    const getOpponentStartingPitcher = () => {
+        if (!bothPitchersInfo) return null;
+        const pitchers = bothPitchersInfo.split(' vs ');
+        return isHome ? pitchers[0]?.replace('SP: ', '') : pitchers[1]?.replace('SP: ', '');
+    };
+
+    const getMarlinsDecisions = () => {
+        if (!gameDecisions) return null;
+        const decisions = gameDecisions.split(', ');
+        const marlinsDecisions = [];
+
+        decisions.forEach(decision => {
+            if (isMarlinsWinning()) {
+                if (decision.startsWith('WP:') || decision.startsWith('SV:')) {
+                    marlinsDecisions.push(decision);
+                }
+            } else {
+                if (decision.startsWith('LP:')) {
+                    marlinsDecisions.push(decision);
+                }
+            }
+        });
+
+        return marlinsDecisions.length > 0 ? marlinsDecisions.join(', ') : null;
+    };
+
+    const getOpponentDecisions = () => {
+        if (!gameDecisions) return null;
+        const decisions = gameDecisions.split(', ');
+        const opponentDecisions = [];
+
+        decisions.forEach(decision => {
+            if (isMarlinsWinning()) {
+                if (decision.startsWith('LP:')) {
+                    opponentDecisions.push(decision);
+                }
+            } else {
+                if (decision.startsWith('WP:') || decision.startsWith('SV:')) {
+                    opponentDecisions.push(decision);
+                }
+            }
+        });
+
+        return opponentDecisions.length > 0 ? opponentDecisions.join(', ') : null;
     };
 
     if (teamInfoLoading) {
         return (
             <Box className="game-row">
-                <div className="game-row__team-info">
+                <div className="game-row__team-name">
                     <span className="game-row__loading">
                         <CircularProgress size={12} />
                         Loading...
@@ -93,9 +142,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
     if (gameState === 'noGame') {
         return (
             <Box className="game-row game-row--no-game">
-                <div className="game-row__team-info">
-                    <Typography className="game-row__team-name">{teamName}</Typography>
-                </div>
+                <div className="game-row__team-name">{teamName}</div>
                 <div className="game-row__no-game">NO GAME</div>
             </Box>
         );
@@ -104,7 +151,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
     if (!game || opponentInfoLoading) {
         return (
             <Box className="game-row">
-                <div className="game-row__team-info">
+                <div className="game-row__team-name">
                     <span className="game-row__loading">
                         <CircularProgress size={12} />
                         Loading game info...
@@ -116,99 +163,40 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
 
     return (
         <Box className="game-row">
-            {/* Team Info */}
-            <div className="game-row__team-info">
-                <Typography className="game-row__team-name">{teamName}</Typography>
-                <Typography className="game-row__opponent">
-                    {isHome ? 'vs.' : '@'} {formatOpponent()}
-                </Typography>
+            {/* Cell 1: Team Name + Score */}
+            <div className="game-row__team-name">
+                {teamName}
+                {(gameState === 'live' || gameState === 'final') && (
+                    <span className={`game-row__score ${isMarlinsWinning() ? 'game-row__score--winning' : 'game-row__score--losing'}`}>
+                        {' '}{myTeam?.score ?? 0}
+                    </span>
+                )}
             </div>
 
-            {/* Game Info */}
-            <div className="game-row__game-info">
+            {/* Cell 2: Opponent + Score */}
+            <div className="game-row__opponent">
+                {isHome ? 'vs' : '@'} {formatOpponent()}
+                {(gameState === 'live' || gameState === 'final') && (
+                    <span className={`game-row__score ${!isMarlinsWinning() ? 'game-row__score--winning' : 'game-row__score--losing'}`}>
+                        {' '}{opponentTeam?.score ?? 0}
+                    </span>
+                )}
+            </div>
+
+            {/* Cell 3: Time/Inning/Status */}
+            <div className="game-row__time-status">
                 {gameState === 'preview' && (
-                    <>
-                        <Typography className="game-row__primary-info">
-                            {formatGameTime(game.gameDate)}
-                        </Typography>
-                        {gameDetailsLoading ? (
-                            <span className="game-row__loading">
-                                <CircularProgress size={10} />
-                            </span>
-                        ) : bothPitchersInfo ? (
-                            <Typography className="game-row__secondary-info">
-                                {bothPitchersInfo}
-                            </Typography>
-                        ) : (
-                            <Typography className="game-row__secondary-info">
-                                SP: TBD vs SP: TBD
-                            </Typography>
-                        )}
-                    </>
+                    <span className="game-row__game-time">
+                        {formatGameTime(game.gameDate)}
+                    </span>
                 )}
 
-                {gameState === 'live' && (
-                    <>
-                        {gameDetailsLoading ? (
-                            <span className="game-row__loading">
-                                <CircularProgress size={10} />
-                            </span>
-                        ) : liveGameInfo ? (
-                            <Typography className="game-row__live-info">
-                                {liveGameInfo}
-                            </Typography>
-                        ) : (
-                            <Typography className="game-row__live-info">
-                                In Progress
-                            </Typography>
-                        )}
-                    </>
+                {gameState === 'live' && liveGameInfo && (
+                    <span className="game-row__live-info">
+                        {liveGameInfo}
+                    </span>
                 )}
 
-                {gameState === 'final' && (
-                    <>
-                        {gameDetailsLoading ? (
-                            <span className="game-row__loading">
-                                <CircularProgress size={10} />
-                            </span>
-                        ) : gameDecisions ? (
-                            <Typography className="game-row__secondary-info">
-                                {gameDecisions}
-                            </Typography>
-                        ) : (
-                            <Typography className="game-row__secondary-info">
-                                Final
-                            </Typography>
-                        )}
-                    </>
-                )}
-            </div>
-
-            {/* Score */}
-            <div className={`game-row__score ${getScoreClass()}`}>
-                {getScoreDisplay() && (
-                    <Typography variant="h6" component="span">
-                        {getScoreDisplay()}
-                    </Typography>
-                )}
-            </div>
-
-            {/* Status */}
-            <div className="game-row__status">
-                {gameState === 'preview' && (
-                    <Chip
-                        label="Preview"
-                        size="small"
-                        className="game-row__status-chip game-row__status-chip--preview"
-                    />
-                )}
-                {gameState === 'live' && (
-                    <Chip
-                        label="LIVE"
-                        size="small"
-                        className="game-row__status-chip game-row__status-chip--live"
-                    />
-                )}
                 {gameState === 'final' && (
                     <Chip
                         label="FINAL"
@@ -218,16 +206,62 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                 )}
             </div>
 
-            {/* Venue */}
+            {/* Cell 4: Bottom Left */}
+            <div className="game-row__bottom-left">
+                {gameState === 'preview' && getMarlinsStartingPitcher() && (
+                    <span className="game-row__pitcher-info">
+                        SP: {getMarlinsStartingPitcher()}
+                    </span>
+                )}
+
+                {gameState === 'live' && isMarlinsAtBat() && (
+                    <span className="game-row__at-bat">AT BAT</span>
+                )}
+
+                {gameState === 'live' && !isMarlinsAtBat() && getMarlinsStartingPitcher() && (
+                    <span className="game-row__pitcher-info">
+                        P: {getMarlinsStartingPitcher()}
+                    </span>
+                )}
+
+                {gameState === 'final' && getMarlinsDecisions() && (
+                    <span className="game-row__pitcher-decisions">
+                        {getMarlinsDecisions()}
+                    </span>
+                )}
+            </div>
+
+            {/* Cell 5: Bottom Center */}
+            <div className="game-row__bottom-center">
+                {gameState === 'preview' && getOpponentStartingPitcher() && (
+                    <span className="game-row__pitcher-info">
+                        SP: {getOpponentStartingPitcher()}
+                    </span>
+                )}
+
+                {gameState === 'live' && !isMarlinsAtBat() && (
+                    <span className="game-row__at-bat">AT BAT</span>
+                )}
+
+                {gameState === 'live' && isMarlinsAtBat() && getOpponentStartingPitcher() && (
+                    <span className="game-row__pitcher-info">
+                        P: {getOpponentStartingPitcher()}
+                    </span>
+                )}
+
+                {gameState === 'final' && getOpponentDecisions() && (
+                    <span className="game-row__pitcher-decisions">
+                        {getOpponentDecisions()}
+                    </span>
+                )}
+            </div>
+
+            {/* Cell 6: Venue */}
             <div className="game-row__venue">
                 {gameDetailsLoading ? (
-                    <span className="game-row__loading">
-                        <CircularProgress size={10} />
-                    </span>
+                    <CircularProgress size={10} />
                 ) : (
-                    <Typography variant="body2" component="span">
-                        {formattedVenue}
-                    </Typography>
+                    formattedVenue
                 )}
             </div>
         </Box>

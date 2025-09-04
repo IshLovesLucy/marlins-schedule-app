@@ -25,7 +25,7 @@ export const mlbApi = createApi({
             keepUnusedDataFor: API_CONFIG.CACHE_TEAM_INFO_TIME,
         }),
         getGameFeed: builder.query<GameFeedResponse, { gamePk: number; teamId: number }>({
-            query: (gamePk) => ({
+            query: ({ gamePk }) => ({
                 url: `${API_CONFIG.GAME_FEED_URL}game/${gamePk}/feed/live`,
                 method: 'GET'
             }),

@@ -3,6 +3,7 @@ import type { Game } from '../types/mlb';
 
 interface UseGameDetailsProps {
     game: Game;
+    teamId: number;
 }
 
 interface UseGameDetailsReturn {
@@ -124,11 +125,12 @@ const formatCurrentPitcher = (gameFeedData: GameFeedData, status: string) => {
     return getLastName(pitcher);
 };
 
-export const useGameDetails = ({ game }: UseGameDetailsProps): UseGameDetailsReturn => {
+export const useGameDetails = ({ game, teamId }: UseGameDetailsProps): UseGameDetailsReturn => {
     const shouldFetch = Boolean(game.gamePk);
-    const { data: gameFeedData, isLoading, error } = useGetGameFeedQuery(game.gamePk, {
-        skip: !shouldFetch,
-    });
+    const { data: gameFeedData, isLoading, error } = useGetGameFeedQuery(
+        { gamePk: game.gamePk, teamId },
+        { skip: !shouldFetch }
+    );
 
     const status = game.status?.statusCode;
 

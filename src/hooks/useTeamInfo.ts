@@ -8,8 +8,6 @@ export function useTeamInfo(teamId: number, options?: { skip?: boolean }) {
     const teamInfo = data?.teams?.[0];
     const parentOrgId = teamInfo?.parentOrgId;
 
-    console.log(teamInfo)
-
     const {
         data: parentOrgData,
         isLoading: parentOrgLoading

@@ -67,7 +67,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
         currentBatter,
         currentPitcher,
         isLoading: gameDetailsLoading,
-    } = useGameDetails({ game: game || ({} as Game) });
+    } = useGameDetails({ game: game || ({} as Game), teamId });
 
     const isHome = game?.teams.home.team.id === teamId;
     const myTeam = isHome ? game?.teams.home : game?.teams.away;

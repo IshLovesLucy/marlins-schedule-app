@@ -15,6 +15,7 @@ interface UseGameDetailsReturn {
     gameDecisions: string | null;
     currentBatter: string | null;
     currentPitcher: string | null;
+    scores: { home: number | null; away: number | null };
 }
 interface GameFeedData {
     gameData?: {
@@ -125,11 +126,28 @@ const formatCurrentPitcher = (gameFeedData: GameFeedData, status: string) => {
     return getLastName(pitcher);
 };
 
+const formatScores = (gameFeedData: GameFeedData, fallbackGame?: Game) => {
+    const homeRuns = gameFeedData?.liveData?.linescore?.teams?.home?.runs;
+    const awayRuns = gameFeedData?.liveData?.linescore?.teams?.away?.runs;
+
+    return {
+        home:
+            typeof homeRuns === 'number'
+                ? homeRuns
+                : fallbackGame?.teams?.home?.score ?? null,
+        away:
+            typeof awayRuns === 'number'
+                ? awayRuns
+                : fallbackGame?.teams?.away?.score ?? null,
+    };
+};
+
+
 export const useGameDetails = ({ game, teamId }: UseGameDetailsProps): UseGameDetailsReturn => {
     const shouldFetch = Boolean(game.gamePk);
     const { data: gameFeedData, isLoading, error } = useGetGameFeedQuery(
         { gamePk: game.gamePk, teamId },
-        { skip: !shouldFetch }
+        { skip: !shouldFetch, pollingInterval: 15000 }
     );
 
     const status = game.status?.statusCode;
@@ -142,6 +160,7 @@ export const useGameDetails = ({ game, teamId }: UseGameDetailsProps): UseGameDe
         liveGameInfo: formatLiveInfo(gameFeedData as GameFeedData, status),
         gameDecisions: formatDecisions(gameFeedData as GameFeedData, status),
         currentBatter: formatCurrentBatter(gameFeedData as GameFeedData, status),
-        currentPitcher: formatCurrentPitcher(gameFeedData as GameFeedData, status)
+        currentPitcher: formatCurrentPitcher(gameFeedData as GameFeedData, status),
+        scores: formatScores(gameFeedData as GameFeedData, game),
     };
 };

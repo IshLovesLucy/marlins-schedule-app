@@ -67,13 +67,14 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
         currentBatter,
         currentPitcher,
         isLoading: gameDetailsLoading,
+        scores,
     } = useGameDetails({ game: game || ({} as Game), teamId });
 
     const isHome = game?.teams.home.team.id === teamId;
-    const myTeam = isHome ? game?.teams.home : game?.teams.away;
-    const opponentTeam = isHome ? game?.teams.away : game?.teams.home;
 
-    const marlinsWinning = (myTeam?.score ?? 0) > (opponentTeam?.score ?? 0);
+    const marlinsWinning =
+        (isHome ? scores.home ?? 0 : scores.away ?? 0) >
+        (isHome ? scores.away ?? 0 : scores.home ?? 0);
 
     const isMarlinsAtBat = useMemo(() => {
         if (gameState !== 'live' || !liveGameInfo) return false;
@@ -95,9 +96,9 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
     );
 
     const opponentDisplay = useMemo(() => {
-        const display = opponentName || opponentTeam?.team.name || '';
+        const display = opponentName || game?.teams.away.team.name || '';
         return opponentParentAbbrev ? `${display} (${opponentParentAbbrev})` : display;
-    }, [opponentName, opponentParentAbbrev, opponentTeam]);
+    }, [opponentName, opponentParentAbbrev, game]);
 
     const loading = teamInfoLoading || (!game && gameState !== 'noGame') || opponentInfoLoading;
     const noGame = gameState === 'noGame';
@@ -150,8 +151,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                                 className={`game-row__score ${marlinsWinning ? 'game-row__score--winning' : 'game-row__score--losing'
                                     }`}
                             >
-                                {' '}
-                                {myTeam?.score ?? 0}
+                                {isHome ? scores.home ?? 0 : scores.away ?? 0}
                             </span>
                         )}
                     </div>
@@ -164,8 +164,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                                 className={`game-row__score ${!marlinsWinning ? 'game-row__score--winning' : 'game-row__score--losing'
                                     }`}
                             >
-                                {' '}
-                                {opponentTeam?.score ?? 0}
+                                {isHome ? scores.away ?? 0 : scores.home ?? 0}
                             </span>
                         )}
                     </div>

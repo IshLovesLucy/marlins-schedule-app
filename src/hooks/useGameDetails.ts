@@ -1,4 +1,5 @@
 import { useGetGameFeedQuery } from '../store/api/mlbApi';
+import { API_CONFIG } from '../constants';
 import type { Game } from '../types/mlb';
 
 interface UseGameDetailsProps {
@@ -37,6 +38,10 @@ interface GameFeedData {
             inningState?: string;
             currentInningOrdinal?: string;
             outs?: number;
+            teams?: {
+                home?: { runs?: number };
+                away?: { runs?: number };
+            };
         };
         decisions?: {
             winner?: { fullName?: string };
@@ -147,7 +152,7 @@ export const useGameDetails = ({ game, teamId }: UseGameDetailsProps): UseGameDe
     const shouldFetch = Boolean(game.gamePk);
     const { data: gameFeedData, isLoading, error } = useGetGameFeedQuery(
         { gamePk: game.gamePk, teamId },
-        { skip: !shouldFetch, pollingInterval: 15000 }
+        { skip: !shouldFetch, pollingInterval: game.status?.statusCode === 'I' ? API_CONFIG.POLLING_GAME_FEED_INTERVAL : 0 }
     );
 
     const status = game.status?.statusCode;

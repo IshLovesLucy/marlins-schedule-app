@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Chip, CircularProgress, Popover, Typography } from '@mui/material';
 import { useTeamInfo } from '../../hooks/useTeamInfo';
 import { useGameDetails } from '../../hooks/useGameDetails';
+import BaseballDiamond from '../BaseballDiamond/BaseballDiamond';
 import type { Game } from '../../types/mlb';
 
 interface GameRowProps {
@@ -68,6 +69,7 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
         currentPitcher,
         isLoading: gameDetailsLoading,
         scores,
+        bases,
     } = useGameDetails({ game: game || ({} as Game), teamId });
 
     const isHome = game?.teams.home.team.id === teamId;
@@ -175,7 +177,16 @@ export default function GameRow({ teamId, game, gameState }: GameRowProps) {
                             <span className="game-row__game-time">{formatGameTime(game!.gameDate)}</span>
                         )}
                         {gameState === 'live' && liveGameInfo && (
-                            <span className="game-row__live-info">{liveGameInfo}</span>
+                            <>
+                                <BaseballDiamond
+                                    basesOccupied={[
+                                        Boolean(bases?.third),
+                                        Boolean(bases?.second),
+                                        Boolean(bases?.first),
+                                    ]}
+                                /> <span className="game-row__live-info">{liveGameInfo}</span>
+                            </>
+
                         )}
                         {gameState === 'final' && (
                             <Chip

@@ -237,3 +237,22 @@ body {
     background-color: var(--status-info) !important;
     color: var(--text-secondary) !important;
 }
+
+/* --- Baseball Diamond--- */
+.baseball-diamond {
+    --gameday-basepath-color: var(--marlins-black);
+    /* default if not set inline */
+}
+
+/* Element */
+.baseball-diamond__base {
+    stroke: var(--gameday-basepath-color);
+    stroke-width: 1;
+    fill: transparent;
+    transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+/* Modifier */
+.baseball-diamond__base--occupied {
+    fill: var(--gameday-basepath-color);
+}

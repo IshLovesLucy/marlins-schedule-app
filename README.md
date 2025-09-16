@@ -25,7 +25,7 @@
 
 ## Testing
 
-### Running Tests
+### Running Tests  ⚾ 🛡️🛡️ 💥💥 🚀🚀
 ```bash
 # Run all tests
 npm test
@@ -40,27 +40,29 @@ npm run test:coverage
 npm test BaseballDiamond.spec.tsx
 ```
 
-### Test Structure
+### Test Structure  ⚾ 🛡️🛡️ 💥💥 🚀🚀
 - **Unit Tests**: Component behavior and logic testing with Jest and React Testing Library
 - **Integration Tests**: API integration and data flow testing
 - **Visual Tests**: Baseball diamond component rendering and runner positioning
-- **Snapshot Tests**: Component output consistency verification
 
 ## Project Architecture
 
-### Tech Stack Choices
+### Tech Stack Choices  ⚾ 🛡️🛡️ 💥💥 🚀🚀
 - **Vite + React + TypeScript**: Fast development with type safety
 - **Material-UI**: Professional components with accessible design out of box
 - **RTK Query**: Data fetching with automatic caching and real-time updates
 - **MLB Stats API**: Official MLB data source for schedules and live game data
-- **Jest + React Testing Library**: Comprehensive testing framework for reliability
+- **Jest + React Testing Library**: Comprehensive testing framework for reliability  ⚾ 🛡️🛡️ 💥💥 🚀🚀
 
 ### Architecture Decisions
 - **Component structure**: Separated pages from reusable components
 - **CSS Grid Layout**: Custom grid system for optimal information display
 - **API integration**: RTK Query handles schedule and live game data with TypeScript interfaces
 - **State management**: Redux store for API state, local React state for UI interactions
-- **Baseball Diamond**: SVG-based component with CSS variables for dynamic runner positioning
+- **Baseball Diamond**: SVG-based component with CSS variables for dynamic runner positioning  ⚾ 🛡️🛡️ 💥💥 🚀🚀
+
+<img width="914" height="244" alt="bases" src="https://github.com/user-attachments/assets/97223f63-2ac8-430b-9835-904172c17c11" />
+
 
 ### Key Features Implementation
 - **Marlins.com UI**: Applied Marlins theme, font, colors
@@ -71,7 +73,7 @@ npm test BaseballDiamond.spec.tsx
 - **Date Navigation**: Calendar picker with refresh functionality
 - **League Level Display**: Interactive popover showing team league information
 - **Error Handling**: Error boundaries and user-friendly error messages
-- **Test Coverage**: Comprehensive unit and integration tests for code quality
+- **Test Coverage**: Comprehensive unit and integration tests for code quality  ⚾ 🛡️🛡️ 💥💥 🚀🚀
 
 ### Development Process
 1. Set up project foundation with Vite, TypeScript, and Material-UI
@@ -134,6 +136,9 @@ npm test BaseballDiamond.spec.tsx
 ### Completed Enhancements ✅
 1. **Unit Testing**: React/Jest Unit tests for code quality and delivery confidence ⚾ 🛡️🛡️ 💥💥 🚀🚀
 2. **On Base Diamond**: Display runners on base using SVG and CSS Variables ⚾ 💎 🏃‍♂️ ✨
+
+<img width="610" height="258" alt="Screenshot 2025-09-16 at 12 57 23 AM" src="https://github.com/user-attachments/assets/c6da3171-647b-4638-8457-85cc8102242d" />
+
 
 ### Future Opportunities
 1. **E2E Testing**: End-to-end testing for complete user journey validation
